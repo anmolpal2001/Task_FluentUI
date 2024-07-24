@@ -31,7 +31,7 @@ import { IconButton, initializeIcons, mergeStyles, values } from "@fluentui/reac
 initializeIcons();
 
 
-const useStyles = (isOpen : boolean) => {
+const useStyles = (isOpen : boolean,isExpanded : boolean) => {
   return {
     root: mergeStyles({
       overflow: 'hidden',
@@ -49,9 +49,14 @@ const useStyles = (isOpen : boolean) => {
       alignItems: 'center',
     }),
     menuItem: mergeStyles({
-      '& svg': {
-        display : !isOpen ? "block" : "none"
+        '& .fui-NavCategoryItem__expandIcon' : {
+          display : !isOpen ? "block" : "none",
+        // transform: isExpanded ? "rotate(180deg)" :  "rotate(90deg)"
       },
+   '& .fui-NavCategoryItem__expandIcon svg': {
+    transform: isExpanded ? 'rotate(90deg)' : 'rotate(-180deg)',
+    transition: 'transform 0.3s ease-in-out',
+  },
     }),
   };
 };
@@ -141,7 +146,7 @@ export const Sidebar = (props: Partial<NavDrawerProps>) => {
   const [expandedItem, setExpandedItem] = React.useState<string | null>(null);
   const [isOpen, setIsOpen] = React.useState(true);
   const [isExpanded, setIsExpanded] = React.useState(true);
-  const styles = useStyles(isOpen);
+  const styles = useStyles(isOpen,isExpanded);
   const active = activeNavItemStyle();
 
   const toggleSidebar = () => {

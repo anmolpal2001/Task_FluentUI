@@ -2,6 +2,7 @@ import React from 'react';
 import { Sidebar } from './Sidebar';
 import { makeStyles } from '@fluentui/react-components';
 import { Outlet } from 'react-router-dom';
+import { SideNavbar } from './SideNavbar';
 
 const useStyles = makeStyles({
   root: {
@@ -23,7 +24,7 @@ const Layout = () => {
 
   return (
     <div className={styles.root}>
-      <Sidebar />
+      <SideNavbar />
       <div className={styles.content}>
         <Outlet />
       </div>

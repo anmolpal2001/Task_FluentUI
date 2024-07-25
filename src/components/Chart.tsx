@@ -239,7 +239,7 @@ const dataCompliance = [
   },
 ];
 
-const processData = (data : any) => {
+const processData = (data : Array<object>) => {
   return data.map((item : any) => {
     const percentage = (item.actual / item.total) * 100;
     return {
@@ -249,6 +249,7 @@ const processData = (data : any) => {
       markers: [percentage],
       value: item.actual,
       total: item.total,
+      textInfo : item.actual + " of " + item.total + "  controls passed " + "(" + percentage + "%)"
     };
   });
 };
@@ -272,6 +273,7 @@ const Chart = () => {
         </div>
         <div className={`${styles.itemClass} ${styles.lastItemClass}`}>
           <h3>Compliance</h3>
+          
           <BulletChart data={processedData} />
         </div>
       </div>

@@ -18,12 +18,30 @@ const useStyles = () => {
 }
 
 const BulletChart = ({ data } : any) => {
+  const customLayer = ({ data    }) => (
+    <g>
+      {data.map((bullet, index) => (
+        <text
+          key={bullet.id}
+          x={bullet.x}
+          y={bullet.y + bullet.height / 2}
+          dx={-50}
+          dy={-10}
+          textAnchor="end"
+          fontSize="14"
+          fill="#333"
+        >
+          {bullet.data.textInfo}
+        </text>
+      ))}
+    </g>
+  );
   console.log(data);
+  
   const styles = useStyles();
   return (
     <div className={styles.hideScale} style={{ height: 400 }}>
       <ResponsiveBullet
-      styles={{display : "none"}}
         data={data}
         margin={{ top: 50, right: 90, bottom: 50, left: 90 }}
         spacing={60}
@@ -36,6 +54,7 @@ const BulletChart = ({ data } : any) => {
         rangeColors={['#808080', '#808080']} // Gray for ranges
         markerColors={({ data } : any) => data.measureColors} // Use the measureColors from data
         axisPosition="after"
+        layers={['grid', 'ranges', 'measures', 'markers', 'axes', customLayer]}
       />
       {/* <div>
         {data.map((item) => {

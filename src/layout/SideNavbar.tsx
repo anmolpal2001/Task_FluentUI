@@ -1,4 +1,4 @@
-import { DrawerProps, toastTitleClassNames } from "@fluentui/react-components";
+import { DrawerProps } from "@fluentui/react-components";
 import * as React from "react";
 import {
   Hamburger,
@@ -10,11 +10,9 @@ import {
   NavDrawerHeader,
   NavDrawerProps,
   NavItem,
-  NavSectionHeader,
   NavSubItem,
   NavSubItemGroup,
 } from "@fluentui/react-nav-preview";
-
 import { makeStyles } from "@fluentui/react-components";
 import {
   Board20Filled,
@@ -32,11 +30,10 @@ import {
   IconButton,
   initializeIcons,
   mergeStyles,
-  values,
 } from "@fluentui/react";
 initializeIcons();
 
-const useStyles = (isOpen: boolean, isExpanded: boolean) => {
+const useStyles = (isOpen: boolean) => {
   return {
     root: mergeStyles({
       overflow: "hidden",
@@ -55,14 +52,8 @@ const useStyles = (isOpen: boolean, isExpanded: boolean) => {
     }),
     menuItem: mergeStyles({
       "& .fui-NavCategoryItem__expandIcon": {
-        // display : "none"
-        display: !isOpen ? !isExpanded ? "block" : "none" : "none",
-        transform: "rotate(90deg)"
+        display: "none",
       },
-      // "& .fui-NavCategoryItem__expandIcon svg": {
-      //   transform: isExpanded ? "rotate(180deg)" : "rotate(90deg)",
-      //   transition: "transform 0.3s ease-in-out",
-      // },
     }),
   };
 };
@@ -123,30 +114,45 @@ const navItems = [
     icon: <ListIcon />,
     path: "/charts",
   },
+  {
+    name: "HR",
+    value: "6",
+    icon: <JobPostings />,
+    subNavItems: [
+      {
+        path: "/hr",
+        name: "Testing 1",
+        value: "6.1",
+      },
+      {
+        path: "/hr/as",
+        name: "Testing 2",
+        value: "6.2",
+      },
+    ],
+  }
 ];
 
 type DrawerType = Required<DrawerProps>["type"];
 
-export const Sidebar = (props: Partial<NavDrawerProps>) => {
+export const SideNavbar = (props: Partial<NavDrawerProps>) => {
   const [expandedItem, setExpandedItem] = React.useState<string | null>(null);
   const [isOpen, setIsOpen] = React.useState(false);
-  const [isExpanded, setIsExpanded] = React.useState(false);
-  const styles = useStyles(isOpen, isExpanded);
+  const styles = useStyles(isOpen);
   const active = activeNavItemStyle();
 
   const toggleSidebar = () => {
     setIsOpen(!isOpen);
   };
 
-  const toggleExp = () => {
-    setIsExpanded(!isExpanded);
-  };
-  const toggleItemExpansion = (itemValue: string) => {
-    setExpandedItem(expandedItem === itemValue ? null : itemValue);
+//   const toggleItemExpansion = (itemValue: string) => {
+//     setExpandedItem(expandedItem === itemValue ? null : itemValue);
+//   };
+const toggleItemExpansion = (itemValue: string) => {
+    setExpandedItem(prevItem => prevItem === itemValue ? null : itemValue);
   };
 
   const getNavItemClass = (path: string) => {
-    console.log("here", path);
     return location.pathname === path ? active.activeNavItem : "";
   };
 
@@ -172,26 +178,21 @@ export const Sidebar = (props: Partial<NavDrawerProps>) => {
           {navItems.map((item) => (
             <React.Fragment key={item.value}>
               {item.subNavItems ? (
-                <NavCategory value={item.value} key={Math.random() * 100}>
-                  {/* <Icon iconName="ChevronUp">
-                    <NavCategoryItem icon={item.icon} >Hello</NavCategoryItem>
-                  </Icon> */}
-                  <NavCategoryItem icon={item.icon} className={styles.menuItem} onClick={toggleExp}>
+                <NavCategory value={item.value}>
+                  <NavCategoryItem
+                    icon={item.icon}
+                    className={styles.menuItem}
+                    onClick={() => toggleItemExpansion(item.value)}
+                  >
                     {!isOpen && item.name}
-                    <Icon iconName={isExpanded ? "ChevronUp" : "" } onClick={toggleExp} style={{position : "absolute", right : 10  }} />
-                    {/* <IconButton
-                      iconProps={{
-                        iconName: isExpanded ? "ChevronUp" : "ChevronDown",
-                      }}
-                      sizes="small"
-                      ariaLabel="Toggle sidebar"
-                      onClick={toggleExp}
-                      className={styles.iconButton}
-                    /> */}
+                    <Icon
+                      iconName={expandedItem === item.value ? "ChevronUp" : "ChevronDown"}
+                      style={{ position: "absolute", right: 10 }}
+                    />
                   </NavCategoryItem>
-                  {isExpanded &&
+                  {expandedItem === item.value &&
                     item.subNavItems.map((subItem) => (
-                      <NavSubItemGroup>
+                      <NavSubItemGroup key={subItem.value}>
                         <NavSubItem
                           href={subItem.path}
                           value={subItem.value}

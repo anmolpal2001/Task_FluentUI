@@ -1,10 +1,27 @@
 import React from "react";
 import { ResponsiveBullet } from "@nivo/bullet";
 import "../App.css"; // Ensure this path is correct
+import { mergeStyles } from "@fluentui/react";
+
+
+const useStyles = () => {
+  return {
+    hideScale : mergeStyles({
+      '& line' : {
+        display : "none"
+      },
+      '& text[dominant-baseline="text-before-edge"]': {
+        display: "none"
+      },
+    })
+  }
+}
 
 const BulletChart = ({ data } : any) => {
+  console.log(data);
+  const styles = useStyles();
   return (
-    <div className="hide-scale" style={{ height: 400 }}>
+    <div className={styles.hideScale} style={{ height: 400 }}>
       <ResponsiveBullet
       styles={{display : "none"}}
         data={data}
@@ -20,6 +37,11 @@ const BulletChart = ({ data } : any) => {
         markerColors={({ data } : any) => data.measureColors} // Use the measureColors from data
         axisPosition="after"
       />
+      {/* <div>
+        {data.map((item) => {
+          <h1>{item.label}</h1>
+        })}
+      </div> */}
     </div>
   );
 };

@@ -6,7 +6,6 @@ import {
   NavDrawer,
   NavDrawerBody,
   NavDrawerHeader,
-  NavDrawerProps,
   NavItem,
   NavSubItem,
   NavSubItemGroup,
@@ -186,7 +185,7 @@ const navItems = [
   },
 ];
 
-export const SideNav = (props: Partial<NavDrawerProps>) => {
+export const SideNav = () => {
   const [isOpen, setIsOpen] = React.useState(false);
   const [expandedItem, setExpandedItem] = React.useState<string | null>(null);
   const styles = useStyles(isOpen);

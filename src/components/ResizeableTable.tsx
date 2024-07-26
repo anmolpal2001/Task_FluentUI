@@ -239,7 +239,7 @@ const TableListResize = () => {
     }));
   };
 
-  const onColumnResize = React.useCallback((_, { columnId, width }) => {
+  const onColumnResize = React.useCallback((_: any, { columnId, width }: any) => {
     setColumnSizingOptions((state) => ({
       ...state,
       [columnId]: {

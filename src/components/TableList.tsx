@@ -146,11 +146,6 @@ import {
   EditRegular,
   OpenRegular,
   DocumentRegular,
-  PeopleRegular,
-  DocumentPdfRegular,
-  VideoRegular,
-  ChevronDownRegular,
-  ChevronRightRegular,
 } from "@fluentui/react-icons";
 import {
   TableBody,
@@ -165,7 +160,6 @@ import {
   makeStyles,
 } from "@fluentui/react-components";
 import {
-  ContextualMenuItemType,
   IContextualMenuItem,
   IContextualMenuProps,
 } from "@fluentui/react/lib/ContextualMenu";

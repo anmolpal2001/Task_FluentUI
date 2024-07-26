@@ -47,6 +47,8 @@ const useStyles = (isOpen: boolean) => {
       color: "#808080",
       display: "flex",
       alignItems: "center",
+      paddingLeft:  isOpen ?   "5px":"140px",  
+      // marginLeft: "10px",
     }),
     menuItem: mergeStyles({
       "& .fui-NavCategoryItem__expandIcon": {
@@ -59,7 +61,7 @@ const useStyles = (isOpen: boolean) => {
       },
     }),
     subMenuItem: mergeStyles({
-      marginLeft: "20px",
+      marginLeft: "30px",
       "& svg": {
         display: "none",
       },
@@ -77,6 +79,12 @@ const activeNavItemStyle = makeStyles({
     backgroundColor: "#E6E6E6",
     color: "#808080",
     borderLeft: "#00308F solid 5px",
+  },
+  activeSubNavItem: {
+    backgroundColor: "#E6E6E6",
+    color: "#808080",
+    borderLeft: "#00308F solid 5px",
+    marginLeft: "20px",
   },
 });
 
@@ -186,8 +194,11 @@ export const SideNav = (props: Partial<NavDrawerProps>) => {
   const [expandedSubItem, setExpandedSubItem] = React.useState<string | null>(
     null
   );
-  const toggleSidebar = () => {
-    setIsOpen(!isOpen);
+  // const toggleSidebar = () => {
+  //   setIsOpen(!isOpen);
+  // };
+  const toggleSidebar = (forceOpen?: boolean) => {
+    setIsOpen(forceOpen ?? !isOpen);
   };
 
   const handleItemClick = (itemValue: string) => {
@@ -203,6 +214,10 @@ export const SideNav = (props: Partial<NavDrawerProps>) => {
     return location.pathname === path ? active.activeNavItem : "";
   };
 
+  const getSubNavItemClass = (path: string) => {
+    return location.pathname === path ? active.activeSubNavItem : "";
+  };
+
   return (
     <div className={styles.root}>
       <NavDrawer
@@ -211,12 +226,14 @@ export const SideNav = (props: Partial<NavDrawerProps>) => {
         style={
           isOpen ? { width: "60px", overflow: "hidden" } : { width: "200px" }
         }
-        // multiple={false}
+        onMouseEnter={() => toggleSidebar(false)}
+        // onMouseLeave={() => toggleSidebar(true)}
+        multiple={false}
       >
         <NavDrawerHeader>
           <IconButton
-            iconProps={{ iconName: isOpen ? "ChevronLeft" : "ChevronRight" }}
-            onClick={toggleSidebar}
+            iconProps={{ iconName: !isOpen ? "ChevronLeft" : "ChevronRight" }}
+            onClick={() => toggleSidebar()}
             ariaLabel="Toggle sidebar"
             className={styles.iconButton}
           />
@@ -240,7 +257,7 @@ export const SideNav = (props: Partial<NavDrawerProps>) => {
                           ? "ChevronUp"
                           : "ChevronDown"
                       }
-                      style={{ position: "absolute", right: 10 }}
+                      style={ isOpen ? {display : "none"} : { position: "absolute", right: 10 }}
                     />
                   </NavCategoryItem>
                   {expandedItem === item.value &&
@@ -269,7 +286,7 @@ export const SideNav = (props: Partial<NavDrawerProps>) => {
                                 <NavSubItemGroup key={subItem.value}>
                                   <NavSubItem
                                     href={subItem.path}
-                                    className={getNavItemClass(subItem.path)}
+                                    className={getSubNavItemClass(subItem.path)}
                                     value={subItem.value}
                                   >
                                     {subItem.name}
@@ -278,15 +295,18 @@ export const SideNav = (props: Partial<NavDrawerProps>) => {
                               ))}
                           </NavCategory>
                         ) : (
-                          <NavSubItemGroup key={subItem.value}>
-                            <NavSubItem
-                              href={subItem.path}
-                              className={getNavItemClass(subItem.path)}
-                              value={subItem.value}
-                            >
-                              {subItem.name}
-                            </NavSubItem>
-                          </NavSubItemGroup>
+                          // <NavSubItemGroup key={subItem.value}>
+                          //   <NavSubItem
+                          //     href={subItem.path}
+                          //     className={getNavItemClass(subItem.path)}
+                          //     value={subItem.value}
+                          //   >
+                          //     {subItem.name}
+                          //   </NavSubItem>
+                          // </NavSubItemGroup>
+                          <NavItem href={subItem.path} value={subItem.value} className={`${getSubNavItemClass(subItem.path)} + ${styles.subMenuItem}`}>
+                            {subItem.name}
+                          </NavItem>
                         )}
                       </React.Fragment>
                     ))}

@@ -193,20 +193,36 @@ export const SideNav = () => {
   const [expandedSubItem, setExpandedSubItem] = React.useState<string | null>(
     null
   );
-  // const toggleSidebar = () => {
-  //   setIsOpen(!isOpen);
-  // };
-  const toggleSidebar = (forceOpen?: boolean) => {
-    setIsOpen(forceOpen ?? !isOpen);
+
+  if(!isOpen){
+    localStorage.setItem("expandedItem", expandedItem ?? "");
+      localStorage.setItem("expandedSubItem", expandedSubItem ?? "");
+  }
+  
+  const toggleSidebar = () => {
+    setIsOpen(!isOpen);
+    if(isOpen){
+      const storedExpandedItem = localStorage.getItem("expandedItem");
+      const storedExpandedSubItem = localStorage.getItem("expandedSubItem");
+      setExpandedItem(storedExpandedItem);
+      setExpandedSubItem(storedExpandedSubItem);
+    }
+    if(!isOpen)
+    {
+      setExpandedItem(null);
+      setExpandedSubItem(null);
+    }
   };
 
   const handleItemClick = (itemValue: string) => {
-    setExpandedItem((prev) => (prev === itemValue ? null : itemValue));
-    setExpandedSubItem(null);
+        setExpandedItem((prev) => (prev === itemValue ? null : itemValue));
+        // localStorage.setItem("expandedItem", itemValue);
+        setExpandedSubItem(null);
   };
 
   const onNavSubItemToggle = (subItemValue: string) => {
     setExpandedSubItem(expandedSubItem === subItemValue ? null : subItemValue);
+    // localStorage.setItem("expandedSubItem", subItemValue);
   };
 
   const getNavItemClass = (path: string) => {
@@ -225,8 +241,6 @@ export const SideNav = () => {
         style={
           isOpen ? { width: "60px", overflow: "hidden" } : { width: "200px" }
         }
-        onMouseEnter={() => toggleSidebar(false)}
-        // onMouseLeave={() => toggleSidebar(true)}
         multiple={false}
       >
         <NavDrawerHeader>
